@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berk Aksesuar - Mobilya & Dekorasyon</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#004d40',
+                        secondary: '#FFD700',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
+
+    <header class="sticky top-0 z-40 bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <div onclick="switchPage('home')" class="flex items-center gap-3 cursor-pointer group">
+                    <div class="w-12 h-12 flex items-center justify-center rounded-lg shadow-lg transition-transform group-hover:scale-105 bg-primary text-secondary">
+                        <span class="text-2xl font-bold font-serif">B</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-bold tracking-tight uppercase text-primary">
+                            BERK <span style="color: #b45309">AKSESUAR</span>
+                        </span>
+                        <span class="text-xs tracking-widest text-gray-500">MOBİLYA & DEKORASYON</span>
+                    </div>
+                </div>
+
+                <nav class="hidden md:flex space-x-6">
+                    <button onclick="switchPage('home')" class="nav-btn text-sm font-medium tracking-wide transition-colors hover:text-yellow-600 text-emerald-800 font-bold border-b-2 border-yellow-400" data-target="home">ANA SAYFA</button>
+                    <button onclick="switchPage('products')" class="nav-btn text-sm font-medium tracking-wide transition-colors hover:text-yellow-600 text-gray-500" data-target="products">ÜRÜNLERİMİZ</button>
+                    <button onclick="switchPage('about')" class="nav-btn text-sm font-medium tracking-wide transition-colors hover:text-yellow-600 text-gray-500" data-target="about">HAKKIMIZDA</button>
+                    <button onclick="switchPage('location')" class="nav-btn text-sm font-medium tracking-wide transition-colors hover:text-yellow-600 text-gray-500" data-target="location">KONUM</button>
+                    <button onclick="switchPage('contact')" class="nav-btn text-sm font-medium tracking-wide transition-colors hover:text-yellow-600 text-gray-500" data-target="contact">İLETİŞİM</button>
+                </nav>
+
+                <div class="md:hidden flex items-center gap-2">
+                    <button id="mobile-menu-btn" onclick="toggleMenu()" class="text-gray-700">
+                         <i data-lucide="menu"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-20 shadow-lg z-50">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <button onclick="switchPage('home'); closeMobileMenu()" class="block w-full text-left px-3 py-4 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-emerald-800 border-b border-gray-50">ANA SAYFA</button>
+                <button onclick="switchPage('products'); closeMobileMenu()" class="block w-full text-left px-3 py-4 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-emerald-800 border-b border-gray-50">ÜRÜNLERİMİZ</button>
+                <button onclick="switchPage('about'); closeMobileMenu()" class="block w-full text-left px-3 py-4 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-emerald-800 border-b border-gray-50">HAKKIMIZDA</button>
+                <button onclick="switchPage('location'); closeMobileMenu()" class="block w-full text-left px-3 py-4 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-emerald-800 border-b border-gray-50">KONUM</button>
+                <button onclick="switchPage('contact'); closeMobileMenu()" class="block w-full text-left px-3 py-4 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-emerald-800 border-b border-gray-50">İLETİŞİM</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="flex-grow">
+        
+        <section id="page-home" class="page-section">
+            <div class="relative h-[500px] md:h-[600px] overflow-hidden bg-gray-900" id="slider-container">
+                <button id="prev-slide" class="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-2 rounded-full text-white backdrop-blur-sm transition z-10">
+                    <i data-lucide="chevron-left" class="w-8 h-8"></i>
+                </button>
+                <button id="next-slide" class="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-2 rounded-full text-white backdrop-blur-sm transition z-10">
+                    <i data-lucide="chevron-right" class="w-8 h-8"></i>
+                </button>
+            </div>
+
+            <div class="py-20 px-4 bg-white text-center">
+                <div class="max-w-3xl mx-auto">
+                    <span class="text-yellow-600 font-bold tracking-widest text-sm uppercase">Berk Aksesuar'a Hoş Geldiniz</span>
+                    <h2 class="mt-4 text-3xl md:text-4xl font-serif font-bold text-emerald-900 mb-6">Yaşam Alanlarınız İçin Modern Dokunuşlar</h2>
+                    <p class="text-gray-600 leading-relaxed text-lg mb-8">
+                        Mobilya aksesuarlarından hobi ürünlerine, dekorasyondan hırdavat malzemelerine kadar geniş ürün yelpazemizle hizmetinizdeyiz. 
+                        Lüksü ve modernliği bir araya getiren koleksiyonlarımızı keşfedin.
+                    </p>
+                    <div class="inline-flex items-center gap-4 bg-emerald-50 border border-emerald-100 p-4 rounded-full shadow-sm">
+                        <div class="bg-emerald-100 p-2 rounded-full text-emerald-700">
+                            <i data-lucide="clock"></i>
+                        </div>
+                        <div class="text-left">
+                            <p class="text-xs font-bold text-emerald-900 uppercase tracking-wide">Çalışma Saatlerimiz</p>
+                            <p class="text-sm text-gray-700">Hafta İçi: 08:30-19:00 • Cmt: 09:00-18:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<div class="py-20 bg-gray-50">
+                <div class="max-w-7xl mx-auto px-6 lg:px-12">
+                    
+                    <div class="flex items-center justify-between mb-10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-1.5 h-8 bg-yellow-500 rounded-full"></div>
+                            <h3 class="text-2xl md:text-3xl font-bold text-emerald-950 tracking-tight">Popüler Kategoriler</h3>
+                        </div>
+                        
+                        <button onclick="switchPage('products')" class="group flex items-center gap-2 text-emerald-800 font-bold text-sm hover:text-emerald-600 transition-colors uppercase tracking-wide">
+                            Tümünü Gör 
+                            <i data-lucide="arrow-right" class="w-5 h-5 transition-transform group-hover:translate-x-1"></i>
+                        </button>
+                    </div>
+
+                    <div id="home-categories" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="page-products" class="page-section hidden animate-fade-in">
+            <div class="bg-emerald-900 py-16 text-center">
+                <h1 class="text-3xl md:text-5xl font-serif font-bold text-white">Ürünlerimiz</h1>
+                <p class="text-emerald-100 mt-4 max-w-2xl mx-auto px-4">İhtiyacınız olan her şey, kalite ve estetikle buluşuyor.</p>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-16">
+                <div id="all-categories" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    </div>
+                <div class="mt-12 p-6 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
+                    <p class="text-yellow-800 font-medium">Aradığınız özel bir parça mı var? Stoğumuzda olmayan ürünler için bizimle iletişime geçebilirsiniz.</p>
+                </div>
+            </div>
+        </section>
+
+<section id="page-about" class="page-section hidden animate-fade-in">
+            <div class="bg-white py-16">
+                <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl h-[400px] group">
+                        <div id="about-slider-container" class="h-full w-full"></div>
+    
+                            <button onclick="prevAboutSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition-all z-10">
+                                <i data-lucide="chevron-left"></i>
+                            </button>
+
+                            <button onclick="nextAboutSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition-all z-10">
+                                <i data-lucide="chevron-right"></i>
+                            </button>
+                    </div>
+
+                    <div>
+                        <h1 class="text-4xl md:text-5xl font-serif font-bold text-emerald-900 mb-6">Berk Aksesuar Hakkında</h1>
+                        <div class="w-24 h-1.5 bg-yellow-400 mb-8 rounded-full"></div>
+                        
+                        <p class="text-gray-600 mb-6 leading-relaxed text-lg">
+                            Berk Aksesuar olarak, mobilya aksesuarları ve dekorasyon sektöründe yıllardır süregelen tecrübemizle hizmet veriyoruz. Amacımız, sadece ürün satmak değil, yaşam alanlarınıza değer katacak modern ve estetik çözümler sunmaktır.
+                        </p>
+                        
+                        <p class="text-gray-600 mb-10 leading-relaxed text-lg">
+                            Müşteri memnuniyetini her zaman ön planda tutarak; mutfak, banyo, hırdavat ve hobi ürünlerinde en kaliteli markaları ve en yeni trendleri sizlerle buluşturuyoruz.
+                        </p>
+
+                        <div class="bg-emerald-50/50 p-6 rounded-r-xl border-l-4 border-emerald-900 mb-12">
+                            <p class="text-emerald-900 font-semibold leading-relaxed italic text-lg">
+                                "Detaylar bütünü oluşturur." felsefesiyle, en küçük vidan en şık dekoratif objeye kadar her ürünümüzde kalite standartlarımızı koruyoruz.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-8">
+                            <div class="bg-white p-6 rounded-xl border-l-4 border-emerald-600 shadow-md hover:shadow-lg transition-shadow">
+                                <span class="block text-4xl font-bold text-emerald-800 mb-2">100%</span>
+                                <span class="text-gray-600 font-medium">Müşteri Memnuniyeti</span>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl border-l-4 border-yellow-500 shadow-md hover:shadow-lg transition-shadow">
+                                <span class="block text-4xl font-bold text-emerald-800 mb-2">1000+</span>
+                                <span class="text-gray-600 font-medium">Ürün Çeşidi</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-location" class="page-section hidden animate-fade-in bg-white">
+            <div class="bg-emerald-900 py-16 text-center">
+                <h1 class="text-3xl md:text-5xl font-serif font-bold text-white">Konum & Adres</h1>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-16">
+                <div class="text-center mb-12">
+                    <p class="text-xl text-gray-600">Mağazamıza gelerek ürünlerimizi yakından inceleyebilir, çayımızı içebilirsiniz.</p>
+                </div>
+                <div class="relative h-96 rounded-xl overflow-hidden shadow-2xl bg-gray-200 border-4 border-white">
+                    <img src="https://images.unsplash.com/photo-1577412647305-991150c7d163?auto=format&fit=crop&q=80&w=1200" class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/30">
+                        <a href="https://maps.google.com/?q=Berk+Aksesuar+Kartepe" target="_blank" class="bg-white text-gray-900 px-6 py-3 rounded-full font-bold shadow-lg flex items-center gap-2 hover:scale-105 transition">
+                            <i data-lucide="map-pin" class="text-red-500"></i> Konuma Git
+                        </a>
+                    </div>
+                </div>
+                <div class="mt-8 text-center bg-gray-50 p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-emerald-900">Açık Adres</h3>
+                    <p class="text-gray-600 mt-2">Dumlupınar, Sakıp Sabancı Cd. No:46/A, 41250 Kartepe/Kocaeli</p>
+                </div>
+            </div>
+        </section>
+
+<section id="page-contact" class="page-section hidden animate-fade-in bg-white">
+            <div class="bg-emerald-900 py-16 text-center">
+                <h1 class="text-3xl md:text-5xl font-serif font-bold text-white">İletişim</h1>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 py-16">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+                    
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-6">İletişim Bilgileri</h2>
+                        <p class="text-gray-600 mb-10 leading-relaxed">
+                            Sorularınız, önerileriniz veya siparişleriniz için aşağıdaki kanallardan bize ulaşabilirsiniz.
+                        </p>
+
+                        <div class="space-y-10">
+                            <div class="flex items-start gap-5">
+                                <div class="flex-shrink-0 w-14 h-14 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600">
+                                    <i data-lucide="phone" class="w-7 h-7"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-900 text-xl">Telefon</h3>
+                                    <p class="text-emerald-600 font-medium mt-1 text-lg tracking-wide">+90 531 308 78 51</p>
+                                    
+                                    <div class="mt-4 space-y-2 text-sm text-gray-600">
+                                        <div class="flex items-center justify-between w-56 border-b border-gray-100 pb-1">
+                                            <span class="font-medium">Hafta İçi:</span>
+                                            <span class="text-gray-800">08:30 - 19:00</span>
+                                        </div>
+                                        <div class="flex items-center justify-between w-56 border-b border-gray-100 pb-1">
+                                            <span class="font-medium">Cumartesi:</span>
+                                            <span class="text-gray-800">09:00 - 18:00</span>
+                                        </div>
+                                        <div class="flex items-center justify-between w-56 pt-1">
+                                            <span class="font-medium">Pazar:</span>
+                                            <span class="text-red-500 font-bold">Kapalı</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-5">
+                                <div class="flex-shrink-0 w-14 h-14 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600">
+                                    <i data-lucide="mail" class="w-7 h-7"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-900 text-xl">E-Posta</h3>
+                                    <p class="text-gray-600 mt-1 text-lg">berkaksesuar41@hotmail.com</p>
+                                    <p class="text-gray-400 text-sm mt-1">7/24 Bize yazabilirsiniz</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 lg:p-10 rounded-2xl border border-gray-100 shadow-xl">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-8">Bize İletişime Geçin ve Sipariş Verin</h2>
+                        <form class="space-y-6" onsubmit="handleContactSubmit(event)">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Ad Soyad</label>
+                                <input type="text" id="name" required class="w-full rounded-lg border-gray-300 border p-4 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">E-Posta</label>
+                                <input type="email" id="email" required class="w-full rounded-lg border-gray-300 border p-4 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Mesajınız</label>
+                                <textarea id="message" rows="5" required class="w-full rounded-lg border-gray-300 border p-4 text-sm focus:border-emerald-500 focus:ring-emerald-500"></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-4 bg-[#009065] text-white font-bold rounded-lg hover:bg-[#007a55] transition shadow-lg text-sm tracking-wide">
+                                 Gönder
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+<footer class="bg-[#002A22] text-white pt-16 pb-8 border-t border-[#002A22]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-[#046c4e] flex items-center justify-center rounded text-yellow-400 font-bold font-serif text-xl shadow-sm">
+                            B
+                        </div>
+                        <span class="text-xl font-bold tracking-tight text-white uppercase">BERK AKSESUAR</span>
+                    </div>
+                    
+                    <p class="text-emerald-100/80 text-sm leading-relaxed max-w-xs">
+                        Modern yaşam alanları için kaliteli mobilya aksesuarları, hırdavat ve dekorasyon çözümleri.
+                    </p>
+
+                    <div class="flex space-x-4 pt-2">
+                        <a href="#" class="text-white hover:text-yellow-400 transition transform hover:scale-110">
+                            <i data-lucide="instagram" class="w-6 h-6"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-yellow-400 transition transform hover:scale-110">
+                            <i data-lucide="facebook" class="w-6 h-6"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-yellow-500 font-bold mb-6 text-sm tracking-widest uppercase">HIZLI ERİŞİM</h3>
+                    <ul class="space-y-3">
+                        <li><button onclick="switchPage('home')" class="text-emerald-100/90 hover:text-white transition uppercase text-sm text-left">ANA SAYFA</button></li>
+                        <li><button onclick="switchPage('products')" class="text-emerald-100/90 hover:text-white transition uppercase text-sm text-left">ÜRÜNLERİMİZ</button></li>
+                        <li><button onclick="switchPage('about')" class="text-emerald-100/90 hover:text-white transition uppercase text-sm text-left">HAKKIMIZDA</button></li>
+                        <li><button onclick="switchPage('location')" class="text-emerald-100/90 hover:text-white transition uppercase text-sm text-left">KONUM</button></li>
+                        <li><button onclick="switchPage('contact')" class="text-emerald-100/90 hover:text-white transition uppercase text-sm text-left">İLETİŞİM</button></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-yellow-500 font-bold mb-6 text-sm tracking-widest uppercase">İLETİŞİM</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3 group">
+                            <i data-lucide="phone" class="w-5 h-5 text-yellow-500 group-hover:text-white transition"></i> 
+                            <span class="text-emerald-100 hover:text-white text-sm transition">+90 531 308 78 51</span>
+                        </li>
+                        <li class="flex items-center gap-3 group">
+                            <i data-lucide="mail" class="w-5 h-5 text-yellow-500 group-hover:text-white transition"></i> 
+                            <span class="text-emerald-100 hover:text-white text-sm transition">berkaksesuar41@hotmail.com</span>
+                        </li>
+                        <li class="flex items-center gap-3 group">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-yellow-500 group-hover:text-white transition"></i> 
+                            <span class="text-emerald-100 hover:text-white text-sm transition">Kocaeli / Türkiye</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-16 pt-8 border-t border-emerald-800/50 text-center">
+                <p class="text-emerald-200/60 text-sm">
+                    © 2025 Berk Aksesuar. Tüm hakları saklıdır.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+<a href="https://wa.me/905313087851?text=Merhaba%20Berk%20Aksesuar,%20bilgi%20almak%20istiyorum." 
+   target="_blank" 
+   class="whatsapp-float" 
+   id="whatsapp-btn">
+    <svg viewBox="0 0 32 32" class="w-8 h-8 fill-current" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.733 5.476 2.016 7.788l-2.016 7.362 7.545-1.981c2.31 1.189 4.931 1.831 7.455 1.831 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.333c-2.408 0-4.747-0.631-6.805-1.825l-0.488-0.283-4.495 1.179 1.2-4.384-0.312-0.496c-1.309-2.083-2.001-4.501-2.001-6.991 0-7.352 5.981-13.333 13.333-13.333s13.333 5.981 13.333 13.333c0 7.352-5.981 13.333-13.333 13.333zM22.952 19.333c-0.38-0.191-2.248-1.109-2.597-1.236-0.349-0.127-0.603-0.191-0.857 0.191s-0.984 1.236-1.206 1.491c-0.222 0.254-0.444 0.285-0.825 0.095-0.381-0.191-1.607-0.592-3.061-1.889-1.131-1.008-1.894-2.253-2.116-2.634s-0.024-0.587 0.167-0.776c0.171-0.171 0.381-0.444 0.571-0.667s0.254-0.381 0.381-0.635c0.127-0.254 0.063-0.476-0.032-0.667s-0.857-2.063-1.175-2.825c-0.309-0.742-0.623-0.641-0.857-0.653s-0.476-0.012-0.73-0.012-0.667 0.095-1.016 0.476c-0.349 0.381-1.333 1.302-1.333 3.175s1.365 3.682 1.556 3.936c0.191 0.254 2.685 4.1 6.505 5.746 0.908 0.392 1.616 0.626 2.169 0.801 0.912 0.29 1.742 0.249 2.399 0.151 0.732-0.109 2.248-0.921 2.565-1.809s0.317-1.651 0.222-1.809c-0.095-0.158-0.349-0.254-0.73-0.444z"></path>
+    </svg>
+    <span class="whatsapp-tooltip">Sipariş ve Bilgi İçin</span>
+</a>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<script type="text/javascript">
+   (function(){
+      emailjs.init("qywmL3Z_ElM3XbMar"); // Public Key'in aslanlar gibi burada kalsın
+   })();
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>
