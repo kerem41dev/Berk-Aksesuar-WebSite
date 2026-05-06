@@ -1,4 +1,5 @@
 🛒 Berk Aksesuar - WebSite
+Sitenin canlı hali: https://kerem41dev.github.io/Berk-Aksesuar-WebSite/
 
 Bu proje, Berk Aksesuar mobilya aksesuarları mağazası için geliştirilmiş, tam responsive (mobil uyumlu) bir mağaza tanıtımı ürün tanıtımı ve iletişim yönetim sistemidir.
 
