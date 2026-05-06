@@ -1,5 +1,6 @@
 🛒 Berk Aksesuar - WebSite
 Sitenin canlı hali: https://kerem41dev.github.io/Berk-Aksesuar-WebSite/
+
 Tüm özellikleri denediğim YouTube videosu: https://www.youtube.com/watch?v=iI18gDf7Ro4
 ![Site Videosu](WebsiteResimler/berkv.gif)
 
